@@ -1,17 +1,27 @@
 # =========================================================
-# STREAMLIT 1.41+ COMPATIBILITY FIX (MUST BE FIRST LINES)
+# STREAMLIT 1.41+ HARD COMPATIBILITY FIX (MUST BE FIRST)
 # =========================================================
 import sys
 import types
 
 try:
     from streamlit.image_utils import image_to_url
-    fake_mod = types.ModuleType("streamlit.elements.image_utils")
-    fake_mod.image_to_url = image_to_url
-    sys.modules["streamlit.elements.image_utils"] = fake_mod
+
+    # Create parent module: streamlit.elements
+    elements_mod = types.ModuleType("streamlit.elements")
+
+    # Create child module: streamlit.elements.image_utils
+    image_utils_mod = types.ModuleType("streamlit.elements.image_utils")
+    image_utils_mod.image_to_url = image_to_url
+
+    # Register both modules
+    sys.modules["streamlit.elements"] = elements_mod
+    sys.modules["streamlit.elements.image_utils"] = image_utils_mod
+
 except Exception:
     pass
 # =========================================================
+
 
 
 import streamlit as st

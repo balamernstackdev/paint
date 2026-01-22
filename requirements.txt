@@ -12,3 +12,4 @@ timm
 streamlit-cropper
 streamlit-drawable-canvas==0.9.3
 streamlit-drawable-canvas-fix
+python==3.10
