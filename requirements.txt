@@ -10,4 +10,4 @@ streamlit-image-comparison
 requests
 timm
 streamlit-cropper
-streamlit-drawable-canvas-fix
+streamlit-drawable-canvas>=0.9.3
