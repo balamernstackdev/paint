@@ -15,7 +15,6 @@ import warnings
 import base64
 from io import BytesIO
 
-# 🛡️ WARNING SHIELD: Silence technical chatter from AI libraries
 warnings.filterwarnings("ignore", category=FutureWarning)
 warnings.filterwarnings("ignore", category=UserWarning)
 # Also hide specific logs from noisy libraries
