@@ -12,6 +12,8 @@ import logging
 import requests
 import gc
 import warnings
+import base64
+from io import BytesIO
 
 # 🛡️ WARNING SHIELD: Silence technical chatter from AI libraries
 warnings.filterwarnings("ignore", category=FutureWarning)
@@ -260,6 +262,16 @@ def get_sam_engine(checkpoint_path, model_type):
     return get_sam_engine_singleton(checkpoint_path, model_type, salt=CACHE_SALT)
 
 # --- HELPER LOGIC ---
+def get_image_base64(image_np):
+    """Convert numpy RGB image to base64 data URL for canvas stability."""
+    if image_np is None:
+        return None
+    pil_img = Image.fromarray(image_np)
+    buffered = BytesIO()
+    pil_img.save(buffered, format="PNG")
+    img_str = base64.b64encode(buffered.getvalue()).decode()
+    return f"data:image/png;base64,{img_str}"
+
 def get_crop_params(image_width, image_height, zoom_level, pan_x, pan_y):
     """
     Calculate crop coordinates based on zoom and normalized pan (0.0 to 1.0).
@@ -1433,7 +1445,7 @@ def main():
                 fill_color="rgba(59, 130, 246, 0.4)", # Photoshop selection blue
                 stroke_width=2,
                 stroke_color="#3B82F6",
-                background_image=Image.fromarray(final_display_image),
+                background_image=Image.fromarray(final_display_image) if os.environ.get('COMPUTERNAME') else get_image_base64(final_display_image),
                 update_streamlit=True,
                 height=display_height,
                 width=display_width,
