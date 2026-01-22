@@ -1,3 +1,19 @@
+# =========================================================
+# STREAMLIT 1.41+ COMPATIBILITY FIX (MUST BE FIRST LINES)
+# =========================================================
+import sys
+import types
+
+try:
+    from streamlit.image_utils import image_to_url
+    fake_mod = types.ModuleType("streamlit.elements.image_utils")
+    fake_mod.image_to_url = image_to_url
+    sys.modules["streamlit.elements.image_utils"] = fake_mod
+except Exception:
+    pass
+# =========================================================
+
+
 import streamlit as st
 import numpy as np
 import torch
@@ -15,6 +31,7 @@ import warnings
 import base64
 from io import BytesIO
 
+# 🛡️ WARNING SHIELD: Silence technical chatter from AI libraries
 warnings.filterwarnings("ignore", category=FutureWarning)
 warnings.filterwarnings("ignore", category=UserWarning)
 # Also hide specific logs from noisy libraries
@@ -33,15 +50,15 @@ torch.backends.cudnn.benchmark = False # Save more RAM
 # Increment this to force Streamlit Cloud to discard old AI logic caches.
 CACHE_SALT = "V1.0.9-STABLE"
 
-# --- MONKEY PATCH FOR STREAMLIT 1.41+ COMPATIBILITY ---
-import streamlit.elements.image as st_image
-try:
-    # In 1.41+, image_to_url moved to image_utils
-    from streamlit.image_utils import image_to_url
-    st_image.image_to_url = image_to_url
-except ImportError:
-    # Older versions already have it in st_image
-    pass
+# # --- MONKEY PATCH FOR STREAMLIT 1.41+ COMPATIBILITY ---
+# import streamlit.elements.image as st_image
+# try:
+#     # In 1.41+, image_to_url moved to image_utils
+#     from streamlit.image_utils import image_to_url
+#     st_image.image_to_url = image_to_url
+# except ImportError:
+#     # Older versions already have it in st_image
+#     pass
 
 from streamlit_image_coordinates import streamlit_image_coordinates
 from streamlit_image_comparison import image_comparison
