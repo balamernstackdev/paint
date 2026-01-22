@@ -1,29 +1,3 @@
-# =========================================================
-# STREAMLIT 1.41+ HARD COMPATIBILITY FIX (MUST BE FIRST)
-# =========================================================
-import sys
-import types
-
-try:
-    from streamlit.image_utils import image_to_url
-
-    # Create parent module: streamlit.elements
-    elements_mod = types.ModuleType("streamlit.elements")
-
-    # Create child module: streamlit.elements.image_utils
-    image_utils_mod = types.ModuleType("streamlit.elements.image_utils")
-    image_utils_mod.image_to_url = image_to_url
-
-    # Register both modules
-    sys.modules["streamlit.elements"] = elements_mod
-    sys.modules["streamlit.elements.image_utils"] = image_utils_mod
-
-except Exception:
-    pass
-# =========================================================
-
-
-
 import streamlit as st
 import numpy as np
 import torch
@@ -60,15 +34,15 @@ torch.backends.cudnn.benchmark = False # Save more RAM
 # Increment this to force Streamlit Cloud to discard old AI logic caches.
 CACHE_SALT = "V1.0.9-STABLE"
 
-# # --- MONKEY PATCH FOR STREAMLIT 1.41+ COMPATIBILITY ---
-# import streamlit.elements.image as st_image
-# try:
-#     # In 1.41+, image_to_url moved to image_utils
-#     from streamlit.image_utils import image_to_url
-#     st_image.image_to_url = image_to_url
-# except ImportError:
-#     # Older versions already have it in st_image
-#     pass
+# --- MONKEY PATCH FOR STREAMLIT 1.41+ COMPATIBILITY ---
+import streamlit.elements.image as st_image
+try:
+    # In 1.41+, image_to_url moved to image_utils
+    from streamlit.image_utils import image_to_url
+    st_image.image_to_url = image_to_url
+except ImportError:
+    # Older versions already have it in st_image
+    pass
 
 from streamlit_image_coordinates import streamlit_image_coordinates
 from streamlit_image_comparison import image_comparison
