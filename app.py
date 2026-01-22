@@ -32,11 +32,6 @@ torch.backends.cudnn.benchmark = False # Save more RAM
 # Increment this to force Streamlit Cloud to discard old AI logic caches.
 CACHE_SALT = "V1.0.9-STABLE"
 
-from streamlit_image_coordinates import streamlit_image_coordinates
-from streamlit_image_comparison import image_comparison
-from streamlit_cropper import st_cropper
-from streamlit_drawable_canvas import st_canvas
-
 # --- MONKEY PATCH FOR STREAMLIT 1.41+ COMPATIBILITY ---
 import streamlit.elements.image as st_image
 try:
@@ -46,6 +41,11 @@ try:
 except ImportError:
     # Older versions already have it in st_image
     pass
+
+from streamlit_image_coordinates import streamlit_image_coordinates
+from streamlit_image_comparison import image_comparison
+from streamlit_cropper import st_cropper
+from streamlit_drawable_canvas import st_canvas
 # 📦 DEPENDENCY GUARD
 # We check these first to give the user a clean install instruction if they are missing locally.
 try:
@@ -1404,6 +1404,10 @@ def main():
         # --- SELECTION PROCESS (MOUSE DRAG/DRAW) ---
         # Container for the image
         with st.container():
+            # CLOUD DEBUG: Verify image existence before canvas render
+            if final_display_image is None or final_display_image.size == 0:
+                 st.error("DEBUG: Display image is empty before canvas render.")
+            
             # Ensure explicit strict types for the component
             final_display_image = np.ascontiguousarray(final_display_image, dtype=np.uint8)
             
