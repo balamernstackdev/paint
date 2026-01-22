@@ -1,0 +1,13 @@
+streamlit==1.40.0
+opencv-python-headless
+numpy
+torch
+torchvision
+git+https://github.com/ChaoningZhang/MobileSAM.git
+scipy
+streamlit-image-coordinates
+streamlit-image-comparison
+requests
+timm
+streamlit-cropper
+streamlit-drawable-canvas
